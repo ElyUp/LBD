@@ -3,46 +3,38 @@ FROM Genero, Manga
 WHERE Genero.IDGenero = Manga.IDGenero
 GROUP BY Manga.Nombre, Genero.Nombre
 ORDER BY Manga.Nombre, Genero.Nombre ASC
+------------------------------------------------------------------------------------
 
------------------------------------------------------------
-
-select Genero.Nombre, COUNT(manga.IDGenero)
-  from manga, Genero
-  where Genero.IDGenero = Manga.IDGenero
-  GROUP by Genero.Nombre
-
-  
-  select Manga.Estado, COUNT(manga.IDGenero)
-  from manga, Genero
-  where Genero.IDGenero = Manga.IDGenero
-  GROUP by Manga.Estado
--------------------------------------------------------------
-
-SELECT RegistroManga.IDRegistroManga COUNT(IDRegistroManga) AS 'IDRM', CapituloManga.Tomo SUM(Tomo) AS 'TT', CapituloManga.Nivel-Acceso MAX([Nivel-Acceso]) AS 'NA' 
-FROM RegistroManga, CapituloManga 
+select Manga.Estado, COUNT(manga.IDGenero) AS 'Nid', SUM([Nivel-Acceso]) AS 'NA', MAX([Nivel-Acceso]) AS 'MNA' 
+from manga, Genero
+where Genero.IDGenero = Manga.IDGenero
+GROUP by Manga.Estado
+---------------------------------------------------------------------------------------
 
 SELECT COUNT(Manga.Nombre) AS 'M', SUM(NumeroCapitulo) AS 'NC', MAX(Tomo) AS 'T' 
 FROM Manga, CapituloManga 
-
-SELECT COUNT(IDRegistroManga) AS 'IDRM', SUM(Tomo) AS 'TT', MAX([Nivel-Acceso]) AS 'NA' 
-FROM RegistroManga, CapituloManga 
-WHERE IDRegistroManga= '084CDC7B-13FC-4B23-855C-C6BC8295C628'
-
-SELECT COUNT(Manga.Nombre) AS 'M', SUM(NumeroCapitulo) AS 'NC', MAX(Tomo) AS 'T' 
-FROM Manga, CapituloManga 
-WHERE Tomo= '70'
+WHERE CapituloManga.IDManga=Manga.IDManga 
 
 
-SELECT COUNT(IDRegistroManga) AS 'IDRM', SUM(Tomo) AS 'TT', MAX([Nivel-Acceso]) AS 'NA' 
-FROM RegistroManga, CapituloManga 
-HAVING COUNT ([Nivel-Acceso]) > 8
+SELECT COUNT(RegistroCapituloM.IDRegistroCapMan) AS 'IDRM', SUM(Tomo) AS 'TT', MAX([Nivel-Acceso]) AS 'NA' 
+FROM RegistroCapituloM, CapituloManga 
+WHERE RegistroCapituloM.IDRegistroCapMan = CapituloManga.IDRegistroCapMan 
+-------------------------------------------------------------------------------------------------
 
-SELECT COUNT(Manga.Nombre) AS 'M', SUM(NumeroCapitulo) AS 'NC', MAX(Tomo) AS 'T' 
-FROM Manga, CapituloManga 
-HAVING COUNT(NumeroCapitulo) > 1
+SELECT Manga.Nombre, COUNT(Manga.Nombre) AS 'M', SUM(NumeroCapitulo) AS 'NC', MAX(Tomo) AS 'T' 
+FROM Manga, CapituloManga
+WHERE Manga.IDManga = CapituloManga.IDManga
+GROUP BY Manga.Nombre 
+HAVING MAX(Tomo) < 70
 
-------------------------------
+select Manga.Estado, COUNT(manga.IDGenero) AS 'Nid', SUM([Nivel-Acceso]) AS 'NA', MAX([Nivel-Acceso]) AS 'MNA' 
+from manga, Genero
+where Genero.IDGenero = Manga.IDGenero
+GROUP by Manga.Estado
+HAVING SUM([Nivel-Acceso]) < 17 
+-------------------------------------------------------------------
 
-SELECT TOP 1 * 
+SELECT TOP 2 * 
 FROM Manga
 ORDER BY Manga.[Nivel-Acceso] ASC
+
